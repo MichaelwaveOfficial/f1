@@ -1,21 +1,12 @@
-from detection import run_rf_detr, get_inference_time, get_detection_info, get_no_of_detections
 
 
-def classify_team(crop):
+def classify_team(team_result):
 
     '''
-        Feeds crop to ROBOFLOW API for team classification. Returns a dictionary containing the car_id, crop, team, and confidence.
+        Returns a dictionary containing the car_id, crop, team, and confidence.
     '''
 
-    car = {}
-
-    # One team-classifier API call per crop.
-    results = run_rf_detr(
-        image_path=output_path,
-        workspace_id=WORKSPACE_ID,
-        model_id=TEAM_CLASSIFIER_ID,
-        api_key=ROBOFLOW_API_KEY,
-    )
+    team = {}
 
     team_predictions = team_result.get("predictions", [])
 
@@ -37,14 +28,12 @@ def classify_team(crop):
         team = "Unknown Team"
         team_confidence = 0.0
 
-    car = {
-        "car_id": car_id,
-        "crop": crop,
-        "team": team,
+    team = {
+        "name": team,
         "confidence": f"{team_confidence:.1%}",
     }
 
-    return car 
+    return team 
 
 
 def classify_tcam_colour(tcam_crop, yellow_ratio_threshold=0.004):

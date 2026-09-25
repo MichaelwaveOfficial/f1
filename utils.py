@@ -1,7 +1,7 @@
 import cv2 
 
 
-def crop_image(image, bbox, padding=0):
+def crop_frame(image, bbox, padding=0):
 
     '''
     Crop the image using the bounding box coordinates.
@@ -17,4 +17,3 @@ def crop_image(image, bbox, padding=0):
     cropped_image = image[y1:y2, x1:x2]
 
     return cropped_image
-    

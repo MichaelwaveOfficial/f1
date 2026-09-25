@@ -14,13 +14,22 @@ class Settings(object):
     CAR_DETECTOR_ID = os.getenv("CAR_DETECTOR_ID")
     TEAM_CLASSIFIER_ID = os.getenv("TEAM_CLASSIFIER_ID")
 
-    # PATHS.
+    # CURRENT WORKING DIRECTORY
     WORKING_DIR = Path.cwd()
-    DATA_DIR = WORKING_DIR / "data"
-    TEST_IMAGES_DIR = DATA_DIR / "pics"
-    DRIVER_JSON = DATA_DIR / "drivers-db.json"
 
-    # Vars
+    # DATA DIRECTORIES
+    DATA_DIR = WORKING_DIR / "data"
+    INPUTS_DIR = WORKING_DIR / "inputs"
+    OUTPUTS_DIR = WORKING_DIR / "outputs"
+
+    # Hardcoded for MVP.
+    test_image = INPUTS_DIR / "three-cars-1.jpg"
+
+    # MOCK DBs or whatever.
+    DRIVER_JSON = DATA_DIR / "drivers-db.json"
+    TEAM_ALIASES_JSON = DATA_DIR / "team-aliases.json"
+
+    # Image processing Vars
     crop_padding = 15
 
 

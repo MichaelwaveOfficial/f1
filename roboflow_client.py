@@ -5,7 +5,7 @@ from io import BytesIO
 
 
 def run_rf_detr(
-    image_path : str,
+    frame : numpy.ndarray,
     workspace_id : str,
     model_id : str,
     api_key : str
@@ -18,10 +18,10 @@ def run_rf_detr(
     '''
 
     # Load and regenerate a clean JPEG
-    image = Image.open(image_path).convert("RGB")
+    image = Image.fromarray(frame)
 
     buffer = BytesIO()
-    image.save(buffer, format="JPEG", quality=95)
+    image.save(buffer, format="JPEG", quality=80)
     jpeg_bytes = buffer.getvalue()
     image_b64 = base64.b64encode(jpeg_bytes).decode("utf-8")
 
