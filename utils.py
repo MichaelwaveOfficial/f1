@@ -1,6 +1,14 @@
 import cv2 
 
 
+def load_json(json_path):
+
+    json_path = Path(json_path)
+
+    with json_path.open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+
 def crop_frame(image, bbox, padding=0):
 
     '''

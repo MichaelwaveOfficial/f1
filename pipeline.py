@@ -1,8 +1,12 @@
 from roboflow_client import run_rf_detr
-from detection import get_detection_info, get_no_of_detections, crop_frame
+from detection import get_detection_info, get_no_of_detections, get_inference_time, tcam_detect_tcam
 from classify import classify_team, classify_tcam_colour
 from config import settings
 from utils import crop_frame
+from driver_lookup import lookup_driver
+
+import cv2
+
 
 
 def run_pipeline():
@@ -46,7 +50,7 @@ def run_pipeline():
 
         car_frame_crop = crop_frame(
             raw_frame,
-            detection_data['bbox'],
+            car['bbox'],
             padding=car_frame_crop_padding
         )
         car_frame_crops.append(car_frame_crop)
@@ -71,6 +75,8 @@ def run_pipeline():
 
     for car in cars:
 
+        car['tcam'] = {}
+
         tcam_crop_padding = 5
 
         tcam_bbox = tcam_detect_tcam(car['bbox'], raw_frame)
@@ -91,9 +97,9 @@ def run_pipeline():
         driver_result = lookup_driver(
             team=car['team']['name'],
             tcam_colour=car['tcam']['colour']
-        )
-        # TODO: Lookup driver func // module. Once driver is identified, add to car dict.
-        # TODO: Figure out way to output.
+        ) 
+
+        car['driver'] = driver_result
 
     ''' Output the results to a outputs dir with JSON file and annotated image. '''
 
