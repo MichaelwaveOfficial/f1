@@ -28,6 +28,7 @@ class Settings(object):
     # MOCK DBs or whatever.
     DRIVER_JSON = DATA_DIR / "drivers-db.json"
     TEAM_ALIASES_JSON = DATA_DIR / "team-aliases.json"
+    TEAM_COLOURS_JSON_PATH = DATA_DIR / "team-colours.json"
 
     # Image processing Vars
     crop_padding = 15

@@ -22,7 +22,7 @@ def lookup_driver(team, tcam_color):
     )
 
     return {
-        "driver": driver,
-        "number": number,
+        "driver": driver_record['driver'],
+        "number": driver_record['number'],
     }
     

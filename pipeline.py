@@ -1,12 +1,17 @@
+from data_out import save_outputs
 from roboflow_client import run_rf_detr
 from detection import get_detection_info, get_no_of_detections, get_inference_time, tcam_detect_tcam
 from classify import classify_team, classify_tcam_colour
 from config import settings
 from utils import crop_frame
 from driver_lookup import lookup_driver
+from annotate import annotate_car_bbox, annotate_team_label, annotate_driver_label, annotate_team_colour  
 
 import cv2
+from pathlib import Path
 
+tcam_crop_padding = 5
+car_frame_crop_padding = 15
 
 
 def run_pipeline():
@@ -21,8 +26,6 @@ def run_pipeline():
 
     # Store data in memory for later use.
     cars = []
-    car_frame_crops = []
-    tcam_frame_crops = []
 
     # Transformer to detect F1 cars in the frame using ROBOFLOW API.
     car_detections = run_rf_detr(
@@ -44,8 +47,6 @@ def run_pipeline():
 
     ''' Crop the detected F1 cars within the frame. '''
 
-    car_frame_crop_padding = 15
-
     for car in cars:
 
         car_frame_crop = crop_frame(
@@ -53,15 +54,15 @@ def run_pipeline():
             car['bbox'],
             padding=car_frame_crop_padding
         )
-        car_frame_crops.append(car_frame_crop)
+        car['crop'] = car_frame_crop
 
     ''' Classify the F1 car's team from cropped F1 car. '''
 
-    for car_id, (car, cropped_frame) in enumerate(zip(cars, car_frame_crops), start=1):
+    for car_id, car in enumerate(cars, start=1):
 
         # Call the ROBOFLOW API to classify the team of the F1 car.
         team_result = run_rf_detr(
-            frame=cropped_frame,
+            frame=car['crop'],
             workspace_id=settings.WORKSPACE_ID,
             model_id=settings.TEAM_CLASSIFIER_ID,
             api_key=settings.ROBOFLOW_API_KEY,
@@ -77,8 +78,6 @@ def run_pipeline():
 
         car['tcam'] = {}
 
-        tcam_crop_padding = 5
-
         tcam_bbox = tcam_detect_tcam(car['bbox'], raw_frame)
         car['tcam']['bbox'] = tcam_bbox
 
@@ -87,7 +86,7 @@ def run_pipeline():
             tcam_bbox,
             padding=tcam_crop_padding
         )
-        tcam_frame_crops.append(tcam_frame_crop)
+        car['tcam']['crop'] = tcam_frame_crop
 
         tcam_colour = classify_tcam_colour(tcam_frame_crop)
         car['tcam']['colour'] = tcam_colour
@@ -101,7 +100,53 @@ def run_pipeline():
 
         car['driver'] = driver_result
 
+    ''' Annotate the frame with the detected F1 cars and their respective information. '''
+
+    annotated_frame = raw_frame
+
+    for car in cars:
+
+        team_name = car['team']['name']
+        driver_name = car['driver']['name_acronym']
+
+        team_colour = annotate_team_colour(team_name)
+
+        annotated_frame = annotate_car_bbox(
+            annotated_frame,
+            car['bbox'],
+            team_colour,
+        )
+        annotated_frame = annotate_team_label(
+            annotated_frame,
+            car['bbox'],
+            team_name,
+        )
+        annotated_frame = annotate_driver_label(
+            annotated_frame,
+            car['bbox'],
+            driver_name,
+        )
+
     ''' Output the results to a outputs dir with JSON file and annotated image. '''
+
+    output_dir = Path(settings.OUTPUTS_DIR) / Path(image_path).stem
+
+    saved_records = save_outputs(
+        raw_frame,
+        annotated_frame,
+        cars,
+        output_dir,
+        frame_id=0,
+    )
+
+
+    ''' Performance Metrics. '''
+
+    print(
+        f'Detected {no_of_cars_detected} F1 cars in {inference_time:.2f} seconds.'
+    )
+
+    return saved_records
 
 
 if __name__ == "__main__":

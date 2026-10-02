@@ -1,0 +1,79 @@
+{
+  "Ferrari": {
+    "color_name": "Rosso Scuderia Red",
+    "bgr": [26, 20, 226],
+    "hsv_lower": [0, 150, 100],
+    "hsv_upper": [10, 255, 255],
+    "broadcast_hex": "#E8002D"
+  },
+  "McLaren": {
+    "color_name": "Papaya Orange",
+    "bgr": [0, 128, 255],
+    "hsv_lower": [10, 180, 180],
+    "hsv_upper": [25, 255, 255],
+    "broadcast_hex": "#FF8000"
+  },
+  "Aston Martin": {
+    "color_name": "British Racing Green",
+    "bgr": [64, 106, 34],
+    "hsv_lower": [40, 70, 50],
+    "hsv_upper": [80, 255, 180],
+    "broadcast_hex": "#229971"
+  },
+  "Alpine": {
+    "color_name": "BWT Pink / Alpine Blue",
+    "bgr": [180, 105, 255],
+    "hsv_lower": [140, 100, 150],
+    "hsv_upper": [170, 255, 255],
+    "broadcast_hex": "#FF87BC"
+  },
+  "Red Bull Racing": {
+    "color_name": "Matte Dark Blue",
+    "bgr": [115, 20, 5],
+    "hsv_lower": [100, 150, 40],
+    "hsv_upper": [125, 255, 160],
+    "broadcast_hex": "#3671C6"
+  },
+  "Racing Bulls (VCARB)": {
+    "color_name": "Gloss Metallic Blue",
+    "bgr": [220, 100, 20],
+    "hsv_lower": [105, 180, 120],
+    "hsv_upper": [125, 255, 255],
+    "broadcast_hex": "#6692FF"
+  },
+  "Mercedes": {
+    "color_name": "Silver / Teal",
+    "bgr": [200, 200, 200],
+    "hsv_lower": [0, 0, 160],
+    "hsv_upper": [180, 30, 230],
+    "broadcast_hex": "#27F4D2"
+  },
+  "Williams": {
+    "color_name": "Navy & Electric Blue",
+    "bgr": [180, 60, 0],
+    "hsv_lower": [110, 150, 80],
+    "hsv_upper": [130, 255, 220],
+    "broadcast_hex": "#64C4FF"
+  },
+  "Audi": {
+    "color_name": "Silver / Lava Red",
+    "bgr": [30, 30, 220],
+    "hsv_lower": [170, 150, 100],
+    "hsv_upper": [180, 255, 255],
+    "broadcast_hex": "#F50531"
+  },
+  "Haas": {
+    "color_name": "White & Red (TGR)",
+    "bgr": [240, 240, 240],
+    "hsv_lower": [0, 0, 200],
+    "hsv_upper": [180, 25, 255],
+    "broadcast_hex": "#B6BABD"
+  },
+  "Cadillac": {
+    "color_name": "Matte Black & Gold",
+    "bgr": [30, 30, 30],
+    "hsv_lower": [0, 0, 10],
+    "hsv_upper": [180, 50, 50],
+    "broadcast_hex": "#FFFFFF"
+  }
+}
