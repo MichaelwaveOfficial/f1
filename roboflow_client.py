@@ -1,11 +1,12 @@
 import requests
 import base64
-import json
 from io import BytesIO
+import numpy as np
+from PIL import Image
 
 
 def run_rf_detr(
-    frame : numpy.ndarray,
+    frame : np.ndarray,
     workspace_id : str,
     model_id : str,
     api_key : str
@@ -35,7 +36,7 @@ def run_rf_detr(
         },
         data=image_b64,
         headers={"Content-Type": "application/json"},
-        timeout=120,
+        timeout=60,
     )
 
     response.raise_for_status()

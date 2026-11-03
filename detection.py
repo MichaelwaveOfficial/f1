@@ -40,25 +40,34 @@ def get_detections(response_json : dict) -> list:
     return response_json.get("predictions", [])
 
 
-def get_detection_info(car_id : int, response_json : dict) -> tuple:
+def get_detection_info(car_id : int, response_json : dict) -> dict:
     '''
         Get the bounding box coordinates and class label from a single detection.
     '''
 
+    detections = get_detections(response_json)
+    index = car_id - 1
+
+    if index < 0 or index >= len(detections):
+        raise IndexError(f"Detection {car_id} is not in this response")
+
+    detection = detections[index]
+    x = float(detection.get("x", 0))
+    y = float(detection.get("y", 0))
+    width = float(detection.get("width", 0))
+    height = float(detection.get("height", 0))
+
     return {
-        'id' : car_id,
-        'bbox' : {
-            'x1' : detection.get("x", 0),
-            'y1' : detection.get("y", 0),
-            'x2' : (
-                detection.get("x", 0) + detection.get("width", 0)
-                ),
-            'y2' : (
-                detection.get("y", 0) + detection.get("height", 0)
-                ),
-            },
-        'class_label' : detection.get("class", ""),
-        'class_id' : detection.get("class_id", -1)
+        "id": car_id,
+        "bbox": {
+            "x1": round(x - width / 2),
+            "y1": round(y - height / 2),
+            "x2": round(x + width / 2),
+            "y2": round(y + height / 2),
+        },
+        "class_label": detection.get("class", ""),
+        "class_id": detection.get("class_id", -1),
+        "confidence": detection.get("confidence", 0.0),
     }
 
 

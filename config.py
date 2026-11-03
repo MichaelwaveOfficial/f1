@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 # Force reload and overwrite existing environment variables
 load_dotenv(override=True)
 
-
 class Settings(object):
 
     # API STUFF.
