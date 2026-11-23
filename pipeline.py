@@ -5,7 +5,7 @@ from classify import classify_team, classify_tcam_colour
 from config import settings
 from utils import crop_frame
 from driver_lookup import lookup_driver
-from annotate import annotate_car_bbox, annotate_team_label, annotate_driver_label, annotate_team_colour  
+from annotate import annotate_car_bbox, annotate_team_label, annotate_driver_label
 
 import cv2
 from pathlib import Path
@@ -109,12 +109,9 @@ def run_pipeline():
         team_name = car['team']['name']
         driver_name = car['driver']['name_acronym']
 
-        team_colour = annotate_team_colour(team_name)
-
         annotated_frame = annotate_car_bbox(
             annotated_frame,
             car['bbox'],
-            team_colour,
         )
         annotated_frame = annotate_team_label(
             annotated_frame,

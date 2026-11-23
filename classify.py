@@ -1,5 +1,9 @@
 
 
+import cv2
+import numpy as np
+
+
 def classify_team(team_result):
 
     '''
@@ -36,42 +40,27 @@ def classify_team(team_result):
     return team 
 
 
-def classify_tcam_colour(tcam_crop, yellow_ratio_threshold=0.004):
+def classify_tcam_colour(tcam_crop, yellow_ratio_threshold=0.05):
 
     '''
         Fortunately, the T-cam is always either black or yellow, so we can use a simple HSV thresholding method 
         to determine the colour; In turn, helping us find our driver!
     '''
 
-    if tcam_crop is None or tcam_crop.size == 0:
-        result = "unknown"
+    if tcam_crop is None or tcam_crop.size == 0 or tcam_crop.size < 16:
+        return "unknown"
 
     # BGR -> HSV conversion. Thresholding for bright yellow.
     hsv = cv2.cvtColor(tcam_crop, cv2.COLOR_BGR2HSV)
 
     # Fluorescent yellow range. The lower hue excludes most orange liveries. (Looking at you McLaren and Ferrari.)
-    lower_yellow = np.array([20, 90, 100], dtype=np.uint8)
-    upper_yellow = np.array([45, 255, 255], dtype=np.uint8)
+    lower_yellow = np.array([18, 90, 100], dtype=np.uint8)
+    upper_yellow = np.array([32, 255, 255], dtype=np.uint8)
 
     yellow_mask = cv2.inRange(
         hsv,
         lower_yellow,
         upper_yellow,
-    )
-
-    # Remove isolated noise and connect nearby yellow pixels.
-    kernel = np.ones((3, 3), dtype=np.uint8)
-
-    # Open & closing ops. To remove small noise and connect nearby yellow pixels.
-    yellow_mask = cv2.morphologyEx(
-        yellow_mask,
-        cv2.MORPH_OPEN,
-        kernel,
-    )
-    yellow_mask = cv2.morphologyEx(
-        yellow_mask,
-        cv2.MORPH_CLOSE,
-        kernel,
     )
 
     crop_area = tcam_crop.shape[0] * tcam_crop.shape[1]
